@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pomodoro Timer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 3rem;
+      background: #f0f0f0;
+      color: #333;
+    }
+    #timer {
+      font-size: 5rem;
+      margin: 1rem 0;
+    }
+    button {
+      font-size: 1.2rem;
+      padding: 0.5rem 1rem;
+      margin: 0.5rem;
+      cursor: pointer;
+    }
+    #status {
+      font-size: 1.5rem;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    #pomodoroCount {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pomodoro Timer</h1>
+  <div id="timer">25:00</div>
+  <div>
+    <button id="startPauseBtn">Start</button>
+    <button id="resetBtn">Reset</button>
+  </div>
+  <div id="status">Ready to work!</div>
+  <div id="pomodoroCount">Pomodoros completed: 0</div>
+
+  <script>
+    const WORK_TIME = 25 * 60; // 25 minutes
+    const SHORT_BREAK = 5 * 60; // 5 minutes
+    const LONG_BREAK = 15 * 60; // 15 minutes
+    const POMODOROS_BEFORE_LONG_BREAK = 4;
+
+    let timer = WORK_TIME;
+    let interval = null;
+    let isRunning = false;
+    let isWorkTime = true;
+    let pomodoroCount = 0;
+
+    const timerEl = document.getElementById("timer");
+    const statusEl = document.getElementById("status");
+    const pomodoroCountEl = document.getElementById("pomodoroCount");
+    const startPauseBtn = document.getElementById("startPauseBtn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    }
+
+    function updateUI() {
+      timerEl.textContent = formatTime(timer);
+      if (isWorkTime) {
+        statusEl.textContent = "Work time — Focus!";
+        statusEl.style.color = "#2c3e50";
+      } else {
+        statusEl.textContent = "Break time — Relax!";
+        statusEl.style.color = "#27ae60";
+      }
+      pomodoroCountEl.textContent = `Pomodoros completed: ${pomodoroCount}`;
+      startPauseBtn.textContent = isRunning ? "Pause" : "Start";
+    }
+
+    function switchMode() {
+      if (isWorkTime) {
+        pomodoroCount++;
+        if (pomodoroCount % POMODOROS_BEFORE_LONG_BREAK === 0) {
+          timer = LONG_BREAK;
+        } else {
+          timer = SHORT_BREAK;
+        }
+        isWorkTime = false;
+      } else {
+        timer = WORK_TIME;
+        isWorkTime = true;
+      }
+      updateUI();
+    }
+
+    function tick() {
+      if (timer > 0) {
+        timer--;
+        updateUI();
+      } else {
+        clearInterval(interval);
+        isRunning = false;
+        switchMode();
+        startInterval();
+      }
+    }
+
+    function startInterval() {
+      if (!isRunning) {
+        interval = setInterval(tick, 1000);
+        isRunning = true;
+        updateUI();
+      }
+    }
+
+    function pauseInterval() {
+      clearInterval(interval);
+      isRunning = false;
+      updateUI();
+    }
+
+    startPauseBtn.addEventListener("click", () => {
+      if (isRunning) {
+        pauseInterval();
+      } else {
+        startInterval();
+      }
+    });
+
+    resetBtn.addEventListener("click", () => {
+      pauseInterval();
+      timer = WORK_TIME;
+      isWorkTime = true;
+      pomodoroCount = 0;
+      updateUI();
+    });
+
+    updateUI();
+  </script>
+</body>
+</html>
