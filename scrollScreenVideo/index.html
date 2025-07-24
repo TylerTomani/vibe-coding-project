@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Video Scroll Sync Demo</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 20px;
+      max-width: 600px;
+    }
+    .sentence {
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      transition: box-shadow 0.3s;
+    }
+    .highlight {
+      box-shadow: 0 0 10px 3px #007BFF;
+      background: #e6f0ff;
+    }
+    #player {
+      margin-bottom: 20px;
+    }
+  </style>
+
+  <!-- Load main JS module -->
+  <script type="module" src="js/main-script.js" defer></script>
+</head>
+<body>
+
+  <div id="player"></div>
+
+  <div id="sentences">
+    <div id="s1" class="sentence">Hello, this is the first sentence.</div>
+    <div id="s2" class="sentence">This is the second sentence, coming later.</div>
+    <div id="s3" class="sentence">And here is the third sentence.</div>
+  </div>
+
+</body>
+</html>
