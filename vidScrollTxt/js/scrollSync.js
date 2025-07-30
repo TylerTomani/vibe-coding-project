@@ -14,6 +14,7 @@ export function startScrollSync(sentenceTimeline) {
     sentenceTimeline.forEach(({ time, id }, idx) => {
       const nextTime = sentenceTimeline[idx + 1]?.time ?? Infinity;
       const el = document.getElementById(id);
+      // console.log(time,id)
       if (!el) return;
 
       if (currentTime >= time && currentTime < nextTime) {
